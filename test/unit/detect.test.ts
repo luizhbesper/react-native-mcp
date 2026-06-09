@@ -2,7 +2,7 @@
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { detectCapabilities, detectProject } from '../../src/env/detect.js';
-import { failResult, fakeExec, okResult } from '../helpers/fake-exec.js';
+import { fakeExec, okResult } from '../helpers/fake-exec.js';
 
 const FIXTURES = join(import.meta.dirname, '..', 'fixtures', 'projects');
 
