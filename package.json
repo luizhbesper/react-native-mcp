@@ -27,7 +27,7 @@
   "bugs": "https://github.com/luizesper/react-native-mcp/issues",
   "type": "module",
   "bin": {
-    "react-native-dev-mcp": "dist/index.js"
+    "react-native-dev-mcp": "dist/index.mjs"
   },
   "files": [
     "dist",

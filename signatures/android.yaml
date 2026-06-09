@@ -1,0 +1,124 @@
+# Android / Gradle failure signatures — see specs/031-signature-db.md
+
+- id: android-sdk-location-missing
+  title: Android SDK location not found
+  platform: android
+  match:
+    - 'SDK location not found\. Define a valid SDK location'
+  errorType: environment
+  probableCause: Neither ANDROID_HOME nor android/local.properties points at an Android SDK.
+  suggestedFix: >-
+    Set ANDROID_HOME (e.g. ~/Library/Android/sdk) or create android/local.properties with
+    sdk.dir=<path>. Run doctor to verify.
+  fixtures:
+    - android/sdk-location-missing.log
+
+- id: android-unsupported-class-file
+  title: JDK version mismatch (unsupported class file)
+  platform: android
+  match:
+    - 'Unsupported class file major version (?<v>\d+)'
+    - 'has been compiled by a more recent version of the Java Runtime'
+  errorType: environment
+  probableCause: Gradle is running on a JDK newer or older than the Android Gradle Plugin supports.
+  suggestedFix: >-
+    Use JDK 17 (RN 0.73+) — set JAVA_HOME to a 17 install or configure org.gradle.java.home
+    in gradle.properties.
+  fixtures:
+    - android/unsupported-class-file.log
+
+- id: android-daemon-start-failure
+  title: Gradle daemon could not start
+  platform: android
+  match:
+    - 'Unable to start the daemon process'
+  errorType: environment
+  probableCause: Broken JVM options, low memory, or a corrupt Gradle user home.
+  suggestedFix: 'Run `./gradlew --stop`, delete ~/.gradle/daemon, and check org.gradle.jvmargs in gradle.properties.'
+  fixtures:
+    - android/daemon-start-failure.log
+
+- id: android-heap-out-of-memory
+  title: Gradle ran out of Java heap
+  platform: android
+  match:
+    - 'java\.lang\.OutOfMemoryError: (?:Java heap space|GC overhead limit exceeded|Metaspace)'
+  errorType: environment
+  probableCause: The default Gradle/Kotlin daemon heap is too small for this project.
+  suggestedFix: 'Raise it in android/gradle.properties: org.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=1g'
+  fixtures:
+    - android/heap-out-of-memory.log
+
+- id: android-duplicate-classes
+  title: Duplicate classes between dependencies
+  platform: android
+  match:
+    - 'Duplicate class [\w.$]+ found in modules'
+  errorType: dependency
+  probableCause: Two dependencies bundle the same classes (often a library migrated artifacts or you depend on both -android and plain variants).
+  suggestedFix: >-
+    Identify the two modules named in the error and exclude one
+    (implementation(...) { exclude group: ..., module: ... }) or align versions.
+  fixtures:
+    - android/duplicate-classes.log
+
+- id: android-resource-linking-failed
+  title: Android resource linking failed (AAPT)
+  platform: android
+  match:
+    - 'Android resource linking failed'
+    - 'AAPT: error: resource (?<res>[\w./:]+) not found'
+  errorType: compile
+  probableCause: A resource reference (string, drawable, style) is missing — often after renaming or a library upgrade changing resource names.
+  suggestedFix: Search the resource name from the error in android/app/src/main/res and fix the reference.
+  fixtures:
+    - android/resource-linking-failed.log
+
+- id: android-ndk-not-installed
+  title: Required NDK version is not installed
+  platform: android
+  match:
+    - 'NDK is not installed'
+    - 'No version of NDK matched the requested version (?<v>[\d.]+)'
+  errorType: environment
+  probableCause: The project pins an NDK version that is not present in the SDK.
+  suggestedFix: 'Install it: sdkmanager "ndk;<version from the error>" (or via Android Studio SDK Manager).'
+  fixtures:
+    - android/ndk-not-installed.log
+
+- id: android-kotlin-metadata-version
+  title: Kotlin version incompatibility
+  platform: android
+  match:
+    - 'was compiled with an incompatible version of Kotlin\. The binary version of its metadata is'
+  errorType: dependency
+  probableCause: A dependency was built with a newer Kotlin than the project's Kotlin plugin.
+  suggestedFix: Raise kotlinVersion in android/build.gradle to match the version implied by the error, or downgrade the dependency.
+  fixtures:
+    - android/kotlin-metadata-version.log
+
+- id: android-minsdk-conflict
+  title: minSdkVersion conflict with a library
+  platform: android
+  match:
+    - 'uses-sdk:minSdkVersion (?<min>\d+) cannot be smaller than version (?<required>\d+) declared in library'
+  errorType: config
+  probableCause: A dependency requires a higher Android minSdkVersion than the app declares.
+  suggestedFix: Raise minSdkVersion in android/build.gradle to the version named in the error.
+  fixtures:
+    - android/minsdk-conflict.log
+
+- id: rn-codegen-task-failed
+  title: React Native codegen task failed
+  platform: android
+  match:
+    - 'Execution failed for task ''(?::\w+)*:generateCodegenArtifactsFromSchema'''
+  errorType: codegen
+  probableCause: >-
+    New Architecture codegen could not generate TurboModule/Fabric artifacts — usually a
+    malformed codegenConfig or a library spec error.
+  suggestedFix: >-
+    Run with --stacktrace for the underlying cause; check codegenConfig in package.json and
+    that node_modules is fully installed.
+  fixtures:
+    - android/codegen-task-failed.log

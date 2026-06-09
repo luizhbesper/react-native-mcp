@@ -1,0 +1,75 @@
+# CocoaPods failure signatures — see specs/031-signature-db.md
+
+- id: cocoapods-sandbox-not-in-sync
+  title: Sandbox not in sync with Podfile.lock
+  platform: cocoapods
+  match:
+    - 'The sandbox is not in sync with the Podfile\.lock'
+  errorType: dependency
+  probableCause: >-
+    Installed pods are out of date relative to Podfile.lock — typical after switching
+    branches or upgrading React Native.
+  suggestedFix: Run pod install in the ios/ directory (tool run_pod_install).
+  fixtures:
+    - cocoapods/sandbox-not-in-sync.log
+
+- id: cocoapods-incompatible-versions
+  title: Incompatible pod version requirements
+  platform: cocoapods
+  match:
+    - 'CocoaPods could not find compatible versions for pod "(?<pod>[^"]+)"'
+  errorType: dependency
+  probableCause: >-
+    Two dependencies pin conflicting versions of the same pod — common when a library
+    lags behind the React Native version in use.
+  suggestedFix: >-
+    Run `pod update <PodName>` (or `pod install --repo-update`); if it persists, check the
+    conflicting requirements listed under the error and upgrade the lagging library.
+  fixtures:
+    - cocoapods/incompatible-versions.log
+
+- id: cocoapods-ffi-architecture
+  title: Ruby ffi built for the wrong CPU architecture
+  platform: cocoapods
+  match:
+    - 'LoadError - dlopen.*ffi_c\.bundle.*incompatible architecture'
+  errorType: environment
+  probableCause: CocoaPods is running under Rosetta (or with an x86_64 Ruby) on Apple Silicon.
+  suggestedFix: >-
+    Use the project Gemfile (`bundle install && bundle exec pod install`) or reinstall ffi
+    natively: `sudo arch -arm64 gem install ffi`.
+  fixtures:
+    - cocoapods/ffi-architecture.log
+
+- id: cocoapods-spec-not-found
+  title: Pod specification not found
+  platform: cocoapods
+  match:
+    - 'Unable to find a specification for `(?<pod>[^`]+)`'
+  errorType: cache
+  probableCause: The local CocoaPods spec repo is stale, or the pod comes from a private repo that is not configured.
+  suggestedFix: 'Run `pod install --repo-update`; for private pods check the source line in the Podfile.'
+  fixtures:
+    - cocoapods/spec-not-found.log
+
+- id: cocoapods-ruby-version-mismatch
+  title: Ruby version does not satisfy the Gemfile
+  platform: cocoapods
+  match:
+    - 'Your Ruby version is [\d.]+, but your Gemfile specified'
+  errorType: environment
+  probableCause: The system Ruby differs from the version pinned by the project Gemfile.
+  suggestedFix: Install the pinned Ruby (rbenv/mise) or update the Gemfile; then `bundle install && bundle exec pod install`.
+  fixtures:
+    - cocoapods/ruby-version-mismatch.log
+
+- id: cocoapods-deployment-target
+  title: Pod requires a higher iOS deployment target
+  platform: cocoapods
+  match:
+    - 'required a higher minimum (?:iOS )?deployment target'
+  errorType: config
+  probableCause: A dependency requires a newer minimum iOS version than the project's platform setting.
+  suggestedFix: Raise `platform :ios, '<version>'` in the Podfile to the version named in the error, then run_pod_install.
+  fixtures:
+    - cocoapods/deployment-target.log

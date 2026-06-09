@@ -1,0 +1,36 @@
+# Metro bundler failure signatures — see specs/031-signature-db.md
+
+- id: metro-port-in-use
+  title: Metro port already in use
+  platform: metro
+  match:
+    - 'listen EADDRINUSE: address already in use.*:(?<port>\d+)'
+  errorType: environment
+  probableCause: Another process (often a previous Metro) is bound to the port.
+  suggestedFix: 'Kill it (lsof -ti:8081 | xargs kill) or start Metro on another port with --port.'
+  fixtures:
+    - metro/port-in-use.log
+
+- id: metro-unable-to-resolve
+  title: Metro cannot resolve a module
+  platform: metro
+  match:
+    - 'Unable to resolve module (?<module>\S+)'
+  errorType: dependency
+  probableCause: The import path is wrong, the package is not installed, or Metro's cache is stale after installing it.
+  suggestedFix: >-
+    Check the import and that the package is in package.json; then restart Metro with
+    --reset-cache.
+  fixtures:
+    - metro/unable-to-resolve.log
+
+- id: metro-sha1-not-computed
+  title: Metro/watchman lost track of a file (SHA-1 not computed)
+  platform: metro
+  match:
+    - 'SHA-1 for file (?<file>\S+) .*is not computed'
+  errorType: cache
+  probableCause: Watchman/Metro haste map is out of sync with the filesystem (common after moving the project or node_modules changes).
+  suggestedFix: 'Run: watchman watch-del-all && npx react-native start --reset-cache'
+  fixtures:
+    - metro/sha1-not-computed.log

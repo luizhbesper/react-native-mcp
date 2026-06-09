@@ -1,0 +1,124 @@
+# iOS / xcodebuild failure signatures — see specs/031-signature-db.md
+# Contributing: add an entry + a fixture under test/fixtures/build-logs/, run `pnpm test`.
+
+- id: ios-duplicate-symbols
+  title: Duplicate symbols at link time
+  platform: ios
+  match:
+    - 'duplicate symbol ''.+'' in:'
+    - 'ld: \d+ duplicate symbols?'
+  errorType: link
+  probableCause: >-
+    Two static libraries (or a pod linked twice via use_frameworks!/static linkage mix)
+    define the same symbol — common after adding a pod that vendors a dependency you
+    already link.
+  suggestedFix: >-
+    Find the duplicated library in the lines above the error and remove the duplicate
+    linkage (check Podfile for the pod appearing twice or vendored frameworks).
+  fixtures:
+    - ios/duplicate-symbols.log
+
+- id: ios-header-not-found
+  title: Header file not found
+  platform: ios
+  match:
+    - '(?<file>[^\s:]+):(?<line>\d+):\d+: fatal error: ''[^'']+\.h'' file not found'
+    - 'fatal error: ''[^'']+\.h'' file not found'
+  errorType: compile
+  probableCause: >-
+    A native header is missing from the search paths — usually pods are out of date for
+    the current React Native version, or a pod was added without running pod install.
+  suggestedFix: Run run_pod_install, then rebuild. If it persists, clean DerivedData (clean: true).
+  fixtures:
+    - ios/header-not-found.log
+
+- id: ios-script-sandbox-rsync
+  title: Xcode user script sandboxing blocked a build script
+  platform: ios
+  match:
+    - 'Sandbox: (?:rsync|bash|sh|node)\S* deny\(1\) file-(?:write-create|read-data)'
+  errorType: config
+  probableCause: >-
+    Xcode's ENABLE_USER_SCRIPT_SANDBOXING blocks the React Native build scripts
+    (Hermes/codegen copy phases) from writing files.
+  suggestedFix: >-
+    Set ENABLE_USER_SCRIPT_SANDBOXING to NO in the project build settings (the RN template
+    does this since 0.74; check after Xcode upgrades).
+  fixtures:
+    - ios/script-sandbox-rsync.log
+
+- id: ios-simulator-arch-mismatch
+  title: Linking simulator build against device binaries
+  platform: ios
+  match:
+    - 'building for ''?iOS[- ]Simulator''?,? but (?:attempting to )?link(?:ing)? (?:in object file|with file|against) .*built for ''?iOS''?'
+  errorType: link
+  probableCause: >-
+    A precompiled framework/xcframework slice for the simulator is missing or excluded —
+    frequent on Apple Silicon with pods that ship fat binaries.
+  suggestedFix: >-
+    Update the offending pod (most ship simulator arm64 slices now); as a workaround add
+    an EXCLUDED_ARCHS override or build for a physical device.
+  fixtures:
+    - ios/simulator-arch-mismatch.log
+
+- id: ios-sdk-not-located
+  title: iphonesimulator SDK cannot be located
+  platform: ios
+  match:
+    - 'xcrun: error: SDK "iphonesimulator" cannot be located'
+    - 'xcodebuild: error: SDK "iphonesimulator" cannot be located'
+  errorType: environment
+  probableCause: >-
+    xcode-select points at the Command Line Tools instead of a full Xcode installation.
+  suggestedFix: 'Run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer'
+  fixtures:
+    - ios/sdk-not-located.log
+
+- id: ios-signing-team-required
+  title: Code signing requires a development team
+  platform: ios
+  match:
+    - 'Signing for "[^"]+" requires a development team'
+  errorType: config
+  probableCause: The scheme builds for device (or a target has signing enabled) without a team configured.
+  suggestedFix: >-
+    Build for the simulator (run_build uses -sdk iphonesimulator), or set a development
+    team for the target in Xcode > Signing & Capabilities.
+  fixtures:
+    - ios/signing-team-required.log
+
+- id: ios-spm-resolution-failed
+  title: Swift Package Manager could not resolve dependencies
+  platform: ios
+  match:
+    - 'xcodebuild: error: Could not resolve package dependencies'
+  errorType: dependency
+  probableCause: A Swift package pin is unreachable or incompatible (network, version range, or Package.resolved drift).
+  suggestedFix: >-
+    Delete ios/<App>.xcworkspace/xcshareddata/swiftpm/Package.resolved and resolve again,
+    or run xcodebuild -resolvePackageDependencies.
+  fixtures:
+    - ios/spm-resolution-failed.log
+
+- id: ios-pch-module-cache-corrupt
+  title: Corrupted precompiled header / module cache
+  platform: ios
+  match:
+    - 'fatal error: (?:malformed or corrupted AST file|file ''.+'' has been modified since the precompiled header)'
+  errorType: cache
+  probableCause: Stale DerivedData/module cache after an Xcode update or branch switch.
+  suggestedFix: 'Rebuild with clean: true; if it persists delete ~/Library/Developer/Xcode/DerivedData.'
+  fixtures:
+    - ios/pch-module-cache-corrupt.log
+
+- id: ios-provisioning-profile-missing
+  title: No matching provisioning profiles found
+  platform: ios
+  match:
+    - 'No profiles for ''[^'']+'' were found'
+  errorType: config
+  probableCause: Building for a physical device without a provisioning profile for the bundle id.
+  suggestedFix: Build for the simulator instead, or create a profile in Xcode (automatic signing with your Apple ID).
+  fixtures:
+    - ios/provisioning-profile-missing.log
