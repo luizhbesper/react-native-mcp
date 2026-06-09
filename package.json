@@ -1,0 +1,68 @@
+{
+  "name": "react-native-dev-mcp",
+  "version": "0.0.0",
+  "description": "MCP server for React Native development — unified simulator/emulator control, Metro/Hermes runtime bridge, and structured native build diagnostics.",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "react-native",
+    "expo",
+    "metro",
+    "hermes",
+    "simulator",
+    "emulator",
+    "xcodebuild",
+    "gradle",
+    "ai",
+    "claude",
+    "codex"
+  ],
+  "license": "MIT",
+  "author": "Luiz Esper <luiz.hb.esper@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luizesper/react-native-mcp.git"
+  },
+  "homepage": "https://luizesper.github.io/react-native-mcp",
+  "bugs": "https://github.com/luizesper/react-native-mcp/issues",
+  "type": "module",
+  "bin": {
+    "react-native-dev-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "signatures",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@10.33.2",
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "pnpm build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "ws": "^8.21.0",
+    "yaml": "^2.9.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.16",
+    "@changesets/changelog-github": "^0.7.0",
+    "@changesets/cli": "^2.27.0",
+    "@types/node": "^24.0.0",
+    "@types/ws": "^8.18.0",
+    "tsdown": "^0.22.2",
+    "typescript": "^5.9.0",
+    "vitest": "^4.1.8"
+  }
+}

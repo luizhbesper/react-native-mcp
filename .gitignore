@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.*
+
+# OS
+.DS_Store
+
+# Editors
+.idea/
+*.swp
+
+# Test artifacts
+coverage/
+
+# Docs build
+docs/dist/
+docs/node_modules/
+docs/.astro/
