@@ -9,7 +9,10 @@ function makeCaps(input: { os: NodeJS.Platform; ios?: boolean; android?: boolean
   return {
     host: { os: input.os, arch: 'arm64', node: '22.0.0' },
     ios: { available: input.ios ?? false, simctl: input.ios ?? false },
-    android: { available: input.android ?? false, adbPath: input.android ? '/usr/bin/adb' : undefined },
+    android: {
+      available: input.android ?? false,
+      adbPath: input.android ? '/usr/bin/adb' : undefined,
+    },
     project: { found: true, kind: 'bare', rnVersion: '0.85.0' },
     problems: [],
   };

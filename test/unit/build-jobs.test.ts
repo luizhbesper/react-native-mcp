@@ -51,7 +51,12 @@ describe('command resolution (spec 030)', () => {
 
   it('builds the gradle task from the variant', () => {
     const root = fakeProject('exit 0');
-    const resolved = resolveBuildCommand({ platform: 'android', projectRoot: root, variant: 'release', clean: true });
+    const resolved = resolveBuildCommand({
+      platform: 'android',
+      projectRoot: root,
+      variant: 'release',
+      clean: true,
+    });
     expect(resolved.args).toEqual(['clean', 'assembleRelease']);
   });
 
@@ -62,7 +67,14 @@ describe('command resolution (spec 030)', () => {
     const resolved = resolveBuildCommand({ platform: 'ios', projectRoot: root });
     expect(resolved.cmd).toBe('xcodebuild');
     expect(resolved.args).toEqual(
-      expect.arrayContaining(['-workspace', 'MyApp.xcworkspace', '-scheme', 'MyApp', '-sdk', 'iphonesimulator']),
+      expect.arrayContaining([
+        '-workspace',
+        'MyApp.xcworkspace',
+        '-scheme',
+        'MyApp',
+        '-sdk',
+        'iphonesimulator',
+      ]),
     );
   });
 });

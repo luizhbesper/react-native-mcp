@@ -39,7 +39,11 @@ export function guessPlatform(log: string): ParseResult['platformGuess'] {
   ) {
     return 'ios';
   }
-  if (/(?:Metro|error: bundling failed|UnableToResolveError|Unable to resolve module|EADDRINUSE)/.test(log)) {
+  if (
+    /(?:Metro|error: bundling failed|UnableToResolveError|Unable to resolve module|EADDRINUSE)/.test(
+      log,
+    )
+  ) {
     return 'metro';
   }
   return 'unknown';

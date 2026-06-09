@@ -64,16 +64,36 @@ describe('adb parsing (spec 010)', () => {
   it('AC3: lists cold AVDs without duplicating running ones', async () => {
     const exec = fakeExec([
       { match: /adb devices -l/, result: okResult(fixture('adb', 'devices-l.txt')) },
-      { match: /-s emulator-5554 shell getprop ro\.build\.version\.release/, result: okResult('15\n') },
-      { match: /-s emulator-5554 shell getprop ro\.boot\.qemu\.avd_name/, result: okResult('Pixel_8\n') },
-      { match: /-s R5CT20ABCDE shell getprop ro\.build\.version\.release/, result: okResult('14\n') },
+      {
+        match: /-s emulator-5554 shell getprop ro\.build\.version\.release/,
+        result: okResult('15\n'),
+      },
+      {
+        match: /-s emulator-5554 shell getprop ro\.boot\.qemu\.avd_name/,
+        result: okResult('Pixel_8\n'),
+      },
+      {
+        match: /-s R5CT20ABCDE shell getprop ro\.build\.version\.release/,
+        result: okResult('14\n'),
+      },
       { match: /emulator -list-avds/, result: okResult('Pixel_8\nPixel_Tablet\n') },
     ]);
     const backend = new AdbBackend(exec, 'adb', 'emulator', true);
     const devices = await backend.list();
     expect(devices).toEqual([
-      expect.objectContaining({ id: 'emulator-5554', name: 'Pixel 8', kind: 'emulator', state: 'booted', osVersion: '15' }),
-      expect.objectContaining({ id: 'R5CT20ABCDE', name: 'SM S918B', kind: 'physical', state: 'booted' }),
+      expect.objectContaining({
+        id: 'emulator-5554',
+        name: 'Pixel 8',
+        kind: 'emulator',
+        state: 'booted',
+        osVersion: '15',
+      }),
+      expect.objectContaining({
+        id: 'R5CT20ABCDE',
+        name: 'SM S918B',
+        kind: 'physical',
+        state: 'booted',
+      }),
       expect.objectContaining({ id: 'avd:Pixel_Tablet', kind: 'emulator', state: 'shutdown' }),
     ]);
   });

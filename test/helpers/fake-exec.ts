@@ -5,8 +5,18 @@ export interface FakeExecCall {
   args: readonly string[];
 }
 
-const okResult = (stdout = ''): ExecResult => ({ stdout, stderr: '', exitCode: 0, timedOut: false });
-const failResult = (stderr = '', exitCode = 1): ExecResult => ({ stdout: '', stderr, exitCode, timedOut: false });
+const okResult = (stdout = ''): ExecResult => ({
+  stdout,
+  stderr: '',
+  exitCode: 0,
+  timedOut: false,
+});
+const failResult = (stderr = '', exitCode = 1): ExecResult => ({
+  stdout: '',
+  stderr,
+  exitCode,
+  timedOut: false,
+});
 
 export { failResult, okResult };
 

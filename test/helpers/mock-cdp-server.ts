@@ -2,7 +2,7 @@
 // Runtime.evaluate is implemented with a real JS sandbox so the Hermes awaitPromise
 // polling workaround (spec 022) can be exercised end-to-end.
 import { createServer, type Server } from 'node:http';
-import { WebSocketServer, type WebSocket } from 'ws';
+import { type WebSocket, WebSocketServer } from 'ws';
 
 export interface MockTarget {
   id: string;
@@ -59,13 +59,17 @@ export class MockCdpServer {
   }
 
   private handle(socket: WebSocket, raw: string): void {
-    const message = JSON.parse(raw) as { id: number; method: string; params?: Record<string, unknown> };
+    const message = JSON.parse(raw) as {
+      id: number;
+      method: string;
+      params?: Record<string, unknown>;
+    };
     const reply = (result: unknown) => socket.send(JSON.stringify({ id: message.id, result }));
 
     if (message.method === 'Runtime.evaluate') {
       const expression = String(message.params?.expression ?? '');
       try {
-        // biome-ignore lint/security/noGlobalEval: the whole point of this mock is evaluating like a JS runtime
+        // evaluating like a real JS runtime is the whole point of this mock
         const fn = new Function('globalThis', `return (${expression});`);
         const value = fn(this.sandbox);
         if (value === undefined) {

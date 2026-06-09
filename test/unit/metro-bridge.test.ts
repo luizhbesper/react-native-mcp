@@ -39,7 +39,12 @@ describe('metro bridge lifecycle (spec 020)', () => {
     const bridge = new MetroBridge(server.port);
     await expect(bridge.ensureSession()).rejects.toMatchObject({
       code: 'TARGET_AMBIGUOUS',
-      details: { targets: [expect.objectContaining({ id: 'page-1' }), expect.objectContaining({ id: 'page-2' })] },
+      details: {
+        targets: [
+          expect.objectContaining({ id: 'page-1' }),
+          expect.objectContaining({ id: 'page-2' }),
+        ],
+      },
     });
     await expect(bridge.ensureSession('page-2')).resolves.toBeDefined();
   });
@@ -63,7 +68,10 @@ describe('metro bridge lifecycle (spec 020)', () => {
   it('AC4: reconnects after eviction and marks the boundary in the buffer', async () => {
     const bridge = new MetroBridge(server.port);
     await bridge.ensureSession();
-    server.emit('Runtime.consoleAPICalled', { type: 'log', args: [{ type: 'string', value: 'before' }] });
+    server.emit('Runtime.consoleAPICalled', {
+      type: 'log',
+      args: [{ type: 'string', value: 'before' }],
+    });
     await delay(50);
 
     server.dropConnections(); // simulate DevTools stealing the slot / app reload
@@ -81,12 +89,17 @@ describe('metro bridge lifecycle (spec 020)', () => {
     await bridge.ensureSession();
     server.emit('Runtime.consoleAPICalled', {
       type: 'warning',
-      args: [{ type: 'string', value: 'low memory' }, { type: 'number', value: 42 }],
+      args: [
+        { type: 'string', value: 'low memory' },
+        { type: 'number', value: 42 },
+      ],
     });
     server.emit('Runtime.exceptionThrown', {
       exceptionDetails: {
         exception: { description: 'Error: boom' },
-        stackTrace: { callFrames: [{ functionName: 'doThing', url: 'app://index.js', lineNumber: 10 }] },
+        stackTrace: {
+          callFrames: [{ functionName: 'doThing', url: 'app://index.js', lineNumber: 10 }],
+        },
       },
     });
     await delay(50);
@@ -120,7 +133,9 @@ describe('evaluate_js (spec 022)', () => {
 
   it('AC2: awaits a promise via the polling workaround and cleans up the global', async () => {
     const connection = await bridge.ensureSession();
-    const outcome = await evaluateExpression(connection, 'Promise.resolve(42)', { timeoutMs: 2_000 });
+    const outcome = await evaluateExpression(connection, 'Promise.resolve(42)', {
+      timeoutMs: 2_000,
+    });
     expect(outcome).toMatchObject({ status: 'ok', result: 42 });
     expect(Object.keys(server.sandbox).filter((k) => k.startsWith('__rnmcp_'))).toEqual([]);
   });

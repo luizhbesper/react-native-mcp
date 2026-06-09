@@ -10,11 +10,19 @@ const darwinRules = [
   { match: /^xcrun simctl help/, result: okResult('usage: simctl') },
   { match: /^xcodebuild -version/, result: okResult('Xcode 16.4\nBuild version 16F313') },
   { match: /^pod --version/, result: okResult('1.16.2\n') },
-  { match: /^adb version/, result: okResult('Android Debug Bridge version 1.0.41\nVersion 35.0.2') },
+  {
+    match: /^adb version/,
+    result: okResult('Android Debug Bridge version 1.0.41\nVersion 35.0.2'),
+  },
   { match: /emulator -version/, result: okResult('Android emulator version 35.1.4') },
   {
     match: /^java -version/,
-    result: { stdout: '', stderr: 'openjdk version "17.0.10" 2024-01-16', exitCode: 0, timedOut: false },
+    result: {
+      stdout: '',
+      stderr: 'openjdk version "17.0.10" 2024-01-16',
+      exitCode: 0,
+      timedOut: false,
+    },
   },
 ];
 
