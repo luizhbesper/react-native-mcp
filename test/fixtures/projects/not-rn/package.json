@@ -1,0 +1,1 @@
+{ "name": "plain-node-app", "dependencies": { "express": "^5.0.0" } }

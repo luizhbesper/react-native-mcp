@@ -1,0 +1,20 @@
+{
+  "devices": {
+    "com.apple.CoreSimulator.SimRuntime.iOS-18-0": [
+      { "udid": "AAAAAAAA-0000-4000-8000-000000000001", "name": "iPhone 16 Pro", "state": "Shutdown", "isAvailable": true },
+      { "udid": "AAAAAAAA-0000-4000-8000-000000000002", "name": "iPhone 16", "state": "Shutdown", "isAvailable": true }
+    ],
+    "com.apple.CoreSimulator.SimRuntime.iOS-18-4": [
+      { "udid": "BBBBBBBB-0000-4000-8000-000000000001", "name": "iPhone 16 Pro", "state": "Booted", "isAvailable": true },
+      { "udid": "BBBBBBBB-0000-4000-8000-000000000002", "name": "iPhone 16", "state": "Shutdown", "isAvailable": true },
+      { "udid": "BBBBBBBB-0000-4000-8000-000000000003", "name": "iPad Pro 13-inch (M4)", "state": "Shutdown", "isAvailable": true }
+    ],
+    "com.apple.CoreSimulator.SimRuntime.iOS-17-5": [
+      { "udid": "CCCCCCCC-0000-4000-8000-000000000001", "name": "iPhone 16", "state": "Shutdown", "isAvailable": true },
+      { "udid": "CCCCCCCC-0000-4000-8000-000000000002", "name": "iPhone SE (3rd generation)", "state": "Shutdown", "isAvailable": false, "availabilityError": "runtime profile not found" }
+    ],
+    "com.apple.CoreSimulator.SimRuntime.watchOS-11-0": [
+      { "udid": "DDDDDDDD-0000-4000-8000-000000000001", "name": "Apple Watch Series 10 (46mm)", "state": "Shutdown", "isAvailable": true }
+    ]
+  }
+}

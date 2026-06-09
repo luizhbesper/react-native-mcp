@@ -32,9 +32,16 @@ export function guessPlatform(log: string): ParseResult['platformGuess'] {
   if (/(?:pod install|CocoaPods|Podfile)/i.test(log) && !/xcodebuild/i.test(log))
     return 'cocoapods';
   if (/(?:> Task :|FAILURE: Build failed|gradlew|org\.gradle)/.test(log)) return 'android';
-  if (/(?:xcodebuild|\.xcworkspace|CompileC|CompileSwift|PhaseScriptExecution)/.test(log))
+  if (
+    /(?:xcodebuild|\.xcworkspace|CompileC|CompileSwift|PhaseScriptExecution|clang: error|^ld: |\*\* BUILD (?:FAILED|SUCCEEDED) \*\*|xcrun: error)/m.test(
+      log,
+    )
+  ) {
     return 'ios';
-  if (/(?:Metro|error: bundling failed|UnableToResolveError)/.test(log)) return 'metro';
+  }
+  if (/(?:Metro|error: bundling failed|UnableToResolveError|Unable to resolve module|EADDRINUSE)/.test(log)) {
+    return 'metro';
+  }
   return 'unknown';
 }
 

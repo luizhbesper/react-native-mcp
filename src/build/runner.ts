@@ -106,14 +106,13 @@ export function startBuild(store: JobStore, request: BuildRequest): BuildJob {
   job.child = child;
   child.stdout?.pipe(logStream, { end: false });
   child.stderr?.pipe(logStream, { end: false });
+  // the job only turns terminal after the log stream flushed — pollers read the file right away
   child.on('error', (err) => {
     logStream.write(`\n[react-native-dev-mcp] spawn error: ${err.message}\n`);
-    logStream.end();
-    store.finish(job.id, 'failed', -1);
+    logStream.end(() => store.finish(job.id, 'failed', -1));
   });
   child.on('exit', (code) => {
-    logStream.end();
-    store.finish(job.id, code === 0 ? 'succeeded' : 'failed', code ?? -1);
+    logStream.end(() => store.finish(job.id, code === 0 ? 'succeeded' : 'failed', code ?? -1));
   });
   return job;
 }

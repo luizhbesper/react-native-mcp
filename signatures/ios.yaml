@@ -28,7 +28,7 @@
   probableCause: >-
     A native header is missing from the search paths — usually pods are out of date for
     the current React Native version, or a pod was added without running pod install.
-  suggestedFix: Run run_pod_install, then rebuild. If it persists, clean DerivedData (clean: true).
+  suggestedFix: 'Run run_pod_install, then rebuild. If it persists, clean DerivedData (clean: true).'
   fixtures:
     - ios/header-not-found.log
 
