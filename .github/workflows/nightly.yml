@@ -1,0 +1,67 @@
+name: Nightly
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  android-emulator:
+    name: Android emulator integration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Run integration suite against a real emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          disable-animations: true
+          script: RUN_ANDROID_TESTS=1 pnpm vitest run test/integration/android.test.ts
+
+  template-build:
+    name: Real Gradle build of a fresh RN app
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: Create a React Native template app
+        run: npx @react-native-community/cli init NightlyApp --skip-install --install-pods false --version latest
+        working-directory: ${{ runner.temp }}
+      - run: npm install
+        working-directory: ${{ runner.temp }}/NightlyApp
+      - name: Build it through run_build / get_build_status
+        run: |
+          node scripts/mcp-call.mjs run_build '{"platform":"android"}' --project-root "${{ runner.temp }}/NightlyApp" | tee run.json
+          JOB_ID=$(node -e "process.stdout.write(JSON.parse(require('fs').readFileSync('run.json','utf8')).structuredContent.jobId)")
+          for i in $(seq 1 30); do
+            node scripts/mcp-call.mjs get_build_status "{\"jobId\":\"$JOB_ID\",\"waitSeconds\":60}" --project-root "${{ runner.temp }}/NightlyApp" | tee status.json
+            STATUS=$(node -e "process.stdout.write(JSON.parse(require('fs').readFileSync('status.json','utf8')).structuredContent.status)")
+            if [ "$STATUS" != "running" ]; then break; fi
+          done
+          test "$STATUS" = "succeeded"

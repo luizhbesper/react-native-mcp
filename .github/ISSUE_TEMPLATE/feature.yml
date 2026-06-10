@@ -1,0 +1,29 @@
+name: Feature request
+description: Propose a new tool or improvement
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the agent workflow that is currently impossible or painful.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: If you have a tool contract in mind (name, inputs, outputs), sketch it here. See specs/ for the format.
+  - type: dropdown
+    id: pillar
+    attributes:
+      label: Pillar
+      options:
+        - Device control
+        - Runtime bridge (Metro/CDP)
+        - Build diagnostics
+        - Environment / doctor
+        - Distribution / docs
+        - New pillar
+    validations:
+      required: true
