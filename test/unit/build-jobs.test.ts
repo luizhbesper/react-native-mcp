@@ -11,8 +11,25 @@ const isWindows = process.platform === 'win32';
 const tempDirs: string[] = [];
 
 afterEach(() => {
-  for (const dir of tempDirs.splice(0)) rmSync(dir, { recursive: true, force: true });
+  // retries: on Windows, killed build processes can hold the cwd lock for a moment (EBUSY)
+  for (const dir of tempDirs.splice(0)) {
+    rmSync(dir, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 });
+  }
 });
+
+/** Wait until a pid is really gone — cancel()'s kill is asynchronous. */
+async function waitForExit(pid: number | undefined, timeoutMs = 5_000): Promise<void> {
+  if (!pid) return;
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    try {
+      process.kill(pid, 0);
+    } catch {
+      return; // gone
+    }
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+}
 
 /** Create a fake RN project whose android/gradlew is a script we control. */
 function fakeProject(gradlewBody: string): string {
@@ -140,7 +157,9 @@ describe('job lifecycle (spec 030)', () => {
     expect(() => startBuild(store, { platform: 'android', projectRoot: root })).toThrowError(
       expect.objectContaining({ code: 'BUILD_ALREADY_RUNNING' }),
     );
+    const pid = job.child?.pid;
     store.cancel(job.id);
+    await waitForExit(pid);
   });
 
   it('waitForTerminal with 0 budget returns the running job immediately', async () => {
@@ -149,6 +168,8 @@ describe('job lifecycle (spec 030)', () => {
     const job = startBuild(store, { platform: 'android', projectRoot: root });
     const polled = await store.waitForTerminal(job.id, 0);
     expect(polled?.status).toBe('running');
+    const pid = job.child?.pid;
     store.cancel(job.id);
+    await waitForExit(pid);
   });
 });

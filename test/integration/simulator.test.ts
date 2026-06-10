@@ -11,6 +11,10 @@ const enabled = process.env.RUN_SIMULATOR_TESTS === '1' && process.platform === 
 
 describe.runIf(enabled)('real iOS simulator (CI integration)', () => {
   it('list → boot → open_url → screenshot → shutdown', { timeout: 600_000 }, async () => {
+    // first contact with CoreSimulator on a cold CI runner can take >30s — warm it up
+    // before detection so the regular probe timeout reflects steady-state behavior
+    await nodeExec('xcrun', ['simctl', 'list', 'devices'], { timeoutMs: 120_000 });
+
     const caps = await detectCapabilities(
       { exec: nodeExec, platform: process.platform, env: process.env },
       process.cwd(),
