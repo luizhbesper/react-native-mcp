@@ -2,12 +2,12 @@ name: Release
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
 
 permissions:
   contents: write
   pull-requests: write
-  id-token: write # npm OIDC trusted publishing + MCP Registry auth — no token secrets
+  id-token: write # npm OIDC trusted publishing (no token secrets needed)
 
 concurrency: release-${{ github.ref }}
 
@@ -16,16 +16,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # needed by changesets to detect changes
+
       - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: pnpm
-          registry-url: https://registry.npmjs.org
+          registry-url: https://registry.npmjs.org # wires NODE_AUTH_TOKEN via OIDC
+
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
 
-      - name: Create release PR or publish
+      # ── stable release (main) ─────────────────────────────────────────────
+      - name: Create release PR or publish (stable)
+        if: github.ref == 'refs/heads/main'
         id: changesets
         uses: changesets/action@v1
         with:
@@ -34,22 +41,40 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # ── pre-release (dev → @next) ─────────────────────────────────────────
+      - name: Publish snapshot to npm (@next)
+        if: github.ref == 'refs/heads/dev'
+        id: prerelease
+        run: |
+          COMMIT=$(git rev-parse --short HEAD)
+          BASE=$(node -p "require('./package.json').version" | sed 's/-.*//') # strip any existing suffix
+          NEXT="${BASE}-next.${COMMIT}"
+          npm version "$NEXT" --no-git-tag-version
+          echo "Publishing $NEXT as @next"
+          npm publish --tag next --provenance --access public
+          echo "published=true" >> "$GITHUB_OUTPUT"
+          echo "version=$NEXT"  >> "$GITHUB_OUTPUT"
+        env:
+          NODE_AUTH_TOKEN: ${{ env.NODE_AUTH_TOKEN }}
+
+      # ── MCP Registry (non-blocking) ───────────────────────────────────────
       - name: Publish to the MCP Registry
-        if: steps.changesets.outputs.published == 'true'
+        if: |
+          (github.ref == 'refs/heads/main' && steps.changesets.outputs.published == 'true') ||
+          (github.ref == 'refs/heads/dev'  && steps.prerelease.outputs.published == 'true')
         continue-on-error: true
         run: |
           VERSION=$(node -p "require('./package.json').version")
           node -e "
             const fs = require('fs');
-            const manifest = JSON.parse(fs.readFileSync('server.json', 'utf8'));
-            manifest.version = '$VERSION';
-            manifest.packages[0].version = '$VERSION';
-            fs.writeFileSync('server.json', JSON.stringify(manifest, null, 2));
+            const m = JSON.parse(fs.readFileSync('server.json', 'utf8'));
+            m.version = '$VERSION';
+            m.packages[0].version = '$VERSION';
+            fs.writeFileSync('server.json', JSON.stringify(m, null, 2));
           "
           OS=$(uname -s | tr '[:upper:]' '[:lower:]')
           ARCH=$(uname -m)
-          TARBALL="mcp-publisher_${OS}_${ARCH}.tar.gz"
-          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/latest/download/${TARBALL}" -o publisher.tar.gz
+          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_${OS}_${ARCH}.tar.gz" -o publisher.tar.gz
           tar xzf publisher.tar.gz mcp-publisher
           chmod +x mcp-publisher
           ./mcp-publisher login github-oidc

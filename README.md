@@ -121,6 +121,7 @@ The easiest high-impact contribution is a **build error signature** — pure YAM
 snippet, no TypeScript. See [CONTRIBUTING.md](CONTRIBUTING.md). Development is spec-driven:
 every tool's contract lives in [`specs/`](specs/).
 
+
 ## License
 
 [MIT](LICENSE) © Luiz Esper
