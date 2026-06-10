@@ -1,0 +1,4 @@
+PhaseScriptExecution [CP]\ Copy\ Pods\ Resources /Users/dev/Library/Developer/Xcode/DerivedData/MyApp/Build/Intermediates.noindex/MyApp.build/Script-AABBCC.sh
+Sandbox: rsync.samba(12345) deny(1) file-write-create /Users/dev/Library/Developer/Xcode/DerivedData/MyApp/Build/Products/Debug-iphonesimulator/MyApp.app/PrivacyInfo.xcprivacy
+error: Sandbox restriction violated
+** BUILD FAILED **

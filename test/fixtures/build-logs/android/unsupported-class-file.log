@@ -1,0 +1,5 @@
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Could not open settings generic class cache for settings file '/Users/dev/app/android/settings.gradle'
+> BUG! exception in phase 'semantic analysis' in source unit '_BuildScript_' Unsupported class file major version 67

@@ -1,0 +1,4 @@
+> Task :app:processDebugResources FAILED
+ERROR: /Users/dev/app/android/app/src/main/res/values/styles.xml:3:5: AAPT: error: resource style/Theme.AppCompat.DayNight.NoActionBar not found.
+Android resource linking failed
+FAILURE: Build failed with an exception.

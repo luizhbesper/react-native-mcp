@@ -1,0 +1,6 @@
+> Task :app:generateCodegenArtifactsFromSchema FAILED
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:generateCodegenArtifactsFromSchema'.
+> Process 'command 'node'' finished with non-zero exit value 1

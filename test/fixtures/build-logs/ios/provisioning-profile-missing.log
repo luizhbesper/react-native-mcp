@@ -1,0 +1,2 @@
+error: No profiles for 'com.example.myapp' were found: Xcode couldn't find any iOS App Development provisioning profiles matching 'com.example.myapp'. (in target 'MyApp' from project 'MyApp')
+** BUILD FAILED **

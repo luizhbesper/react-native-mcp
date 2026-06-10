@@ -1,0 +1,2 @@
+Analyzing dependencies
+[!] The platform of the target `MyApp` (iOS 13.0) is not compatible with `ExpoModulesCore (2.1.0)`, which required a higher minimum deployment target (iOS 15.1)

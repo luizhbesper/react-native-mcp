@@ -102,7 +102,11 @@ export function startBuild(store: JobStore, request: BuildRequest): BuildJob {
   job.logPath = join(logDir, `${job.id}.log`);
 
   const logStream = createWriteStream(job.logPath);
-  const child = spawnDetached(resolved.cmd, resolved.args, { cwd: resolved.cwd });
+  // Windows refuses to spawn .bat/.cmd without a shell (CVE-2024-27980) — route through cmd.exe
+  const isBatch = process.platform === 'win32' && /\.(bat|cmd)$/i.test(resolved.cmd);
+  const child = isBatch
+    ? spawnDetached('cmd.exe', ['/d', '/s', '/c', resolved.cmd, ...resolved.args], { cwd: resolved.cwd })
+    : spawnDetached(resolved.cmd, resolved.args, { cwd: resolved.cwd });
   job.child = child;
   child.stdout?.pipe(logStream, { end: false });
   child.stderr?.pipe(logStream, { end: false });

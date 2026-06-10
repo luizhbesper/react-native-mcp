@@ -1,0 +1,4 @@
+CompileC MyModule.o /Users/dev/app/ios/MyModule.m normal arm64 objective-c
+fatal error: malformed or corrupted AST file: 'could not find file referenced by AST file' in module 'UIKit'
+1 error generated.
+** BUILD FAILED **

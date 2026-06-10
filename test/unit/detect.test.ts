@@ -62,12 +62,13 @@ describe('environment detection (spec 001)', () => {
 
   it('resolves adb from ANDROID_HOME when not on PATH', async () => {
     const sdk = '/opt/android-sdk';
+    // path separators vary by host OS (join() is used in detect.ts) — match both
     const exec = fakeExec([
       {
-        match: /^\/opt\/android-sdk\/platform-tools\/adb version/,
+        match: /android-sdk[\\/]platform-tools[\\/]adb version/,
         result: okResult('Android Debug Bridge version 1.0.41'),
       },
-      { match: /^\/opt\/android-sdk\/emulator\/emulator -version/, result: okResult('ok') },
+      { match: /android-sdk[\\/]emulator[\\/]emulator -version/, result: okResult('ok') },
       { match: /^java -version/, result: okResult() },
     ]);
     const caps = await detectCapabilities(

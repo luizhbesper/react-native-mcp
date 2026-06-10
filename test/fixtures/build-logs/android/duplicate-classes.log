@@ -1,0 +1,7 @@
+> Task :app:checkDebugDuplicateClasses FAILED
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:checkDebugDuplicateClasses'.
+> A failure occurred while executing com.android.build.gradle.internal.tasks.CheckDuplicatesRunnable
+   > Duplicate class com.google.android.gms.internal.measurement.zzbz found in modules play-services-measurement-base-21.0.0 and play-services-measurement-impl-20.1.2

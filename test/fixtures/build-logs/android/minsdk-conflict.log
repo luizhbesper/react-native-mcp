@@ -1,0 +1,4 @@
+> Task :app:processDebugMainManifest FAILED
+/Users/dev/app/android/app/src/main/AndroidManifest.xml Error:
+        uses-sdk:minSdkVersion 21 cannot be smaller than version 24 declared in library [:react-native-video] /Users/dev/app/node_modules/react-native-video/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml
+FAILURE: Build failed with an exception.

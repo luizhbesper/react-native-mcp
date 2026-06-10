@@ -1,0 +1,4 @@
+Ld /Users/dev/Library/Developer/Xcode/DerivedData/MyApp/Build/Products/Debug-iphonesimulator/MyApp.app/MyApp normal
+ld: building for 'iOS-Simulator', but linking in object file built for 'iOS', file '/Users/dev/app/ios/Frameworks/Analytics.framework/Analytics'
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+** BUILD FAILED **

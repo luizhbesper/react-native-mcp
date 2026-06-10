@@ -1,0 +1,6 @@
+Build settings from command line:
+    SDKROOT = iphonesimulator18.4
+CompileC MyApp.o /Users/dev/app/ios/MyApp/AppDelegate.mm normal arm64 objective-c++
+Ld /Users/dev/Library/Developer/Xcode/DerivedData/MyApp/Build/Products/Debug-iphonesimulator/MyApp.app/MyApp normal
+Touch /Users/dev/Library/Developer/Xcode/DerivedData/MyApp/Build/Products/Debug-iphonesimulator/MyApp.app
+** BUILD SUCCEEDED **

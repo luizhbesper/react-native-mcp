@@ -1,0 +1,6 @@
+CompileC MyApp.o /Users/dev/app/ios/MyApp/AppDelegate.mm normal arm64 objective-c++
+/Users/dev/app/ios/MyApp/AppDelegate.mm:3:9: fatal error: 'React/RCTBridgeModule.h' file not found
+#import <React/RCTBridgeModule.h>
+        ^~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+** BUILD FAILED **

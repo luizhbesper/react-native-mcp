@@ -1,0 +1,5 @@
+Analyzing dependencies
+[!] Unable to find a specification for `MyPrivatePod (~> 2.1)` depended upon by `MyApp`
+
+You have either:
+ * out-of-date source repos which you can update with `pod repo update`

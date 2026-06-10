@@ -1,0 +1,3 @@
+error: SHA-1 for file /Users/dev/app/node_modules/react-native/index.js (/Users/dev/app/node_modules/react-native/index.js) is not computed.
+         Potential causes:
+           1) You have symlinked files in your project

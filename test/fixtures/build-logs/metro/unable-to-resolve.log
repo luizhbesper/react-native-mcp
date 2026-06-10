@@ -1,0 +1,2 @@
+error: Error: Unable to resolve module react-native-mmkv from /Users/dev/app/src/storage.ts: react-native-mmkv could not be found within the project or in these directories:
+  node_modules

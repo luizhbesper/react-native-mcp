@@ -16,7 +16,9 @@ export interface DetectDeps {
   env: NodeJS.ProcessEnv;
 }
 
-const PROBE_TIMEOUT_MS = 3_000;
+// generous: the first xcrun/pod invocation on a cold machine (or fresh CI runner) can
+// take several seconds while system services spin up
+const PROBE_TIMEOUT_MS = 10_000;
 
 async function probe(
   deps: DetectDeps,
@@ -159,7 +161,8 @@ export function detectProject(startDir: string): ProjectInfo {
           root: dir,
           kind: isExpo ? 'expo' : 'bare',
           rnVersion,
-          expoSdk: expoVersion ? expoVersion.replace(/[^\d.].*$/, '').split('.')[0] : undefined,
+          // tolerate ranges like "~56.0.0": the SDK is the first number in the string
+          expoSdk: expoVersion ? /(\d+)/.exec(expoVersion)?.[1] : undefined,
         };
       }
     }

@@ -1,0 +1,5 @@
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:configureCMakeDebug[arm64-v8a]'.
+> No version of NDK matched the requested version 26.1.10909125. Versions available locally: 25.2.9519653

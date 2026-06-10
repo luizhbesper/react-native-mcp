@@ -1,0 +1,4 @@
+PhaseScriptExecution [CP]\ Check\ Pods\ Manifest.lock
+diff: /Podfile.lock: No such file or directory
+error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
+** BUILD FAILED **

@@ -26,3 +26,6 @@ coverage/
 docs/dist/
 docs/node_modules/
 docs/.astro/
+
+# Test fixtures are data, never ignore them (overrides *.log and node_modules/ above)
+!test/fixtures/**

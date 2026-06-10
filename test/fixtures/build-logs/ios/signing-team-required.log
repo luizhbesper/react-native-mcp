@@ -1,0 +1,2 @@
+error: Signing for "MyApp" requires a development team. Select a development team in the Signing & Capabilities editor. (in target 'MyApp' from project 'MyApp')
+** BUILD FAILED **

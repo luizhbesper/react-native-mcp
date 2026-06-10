@@ -1,0 +1,4 @@
+> Task :app:mergeDebugJavaResource FAILED
+java.lang.OutOfMemoryError: Java heap space
+        at java.base/java.util.Arrays.copyOf(Arrays.java:3537)
+FAILURE: Build failed with an exception.

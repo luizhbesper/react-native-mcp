@@ -72,8 +72,9 @@ captured for `doctor`, never a crash.
   `android.available` is false and `problems[]` contains `ANDROID_SDK_NOT_FOUND`.
 - **AC-4** Given an Expo project root, When detection runs, Then `project.kind === "expo"` and
   `rnVersion` is populated.
-- **AC-5** Given probes that hang, When detection runs, Then each probe is killed after 3s and
-  detection still completes.
+- **AC-5** Given probes that hang, When detection runs, Then each probe is killed after 10s
+  and detection still completes. (10s, not less: the first `xcrun`/`pod` call on a cold
+  machine can take several seconds while system services warm up.)
 
 ## Test plan
 

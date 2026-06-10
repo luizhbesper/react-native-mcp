@@ -1,0 +1,5 @@
+Analyzing dependencies
+[!] CocoaPods could not find compatible versions for pod "React-Core":
+  In Podfile:
+    React-Core (from `../node_modules/react-native`)
+    react-native-old-lib was resolved to 1.0.0, which depends on React-Core (= 0.68.0)

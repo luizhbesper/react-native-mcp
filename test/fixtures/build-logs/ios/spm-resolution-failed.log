@@ -1,0 +1,3 @@
+Resolve Package Graph
+xcodebuild: error: Could not resolve package dependencies:
+  Package resolution failed; unable to connect to https://github.com/example/swift-lib.git
