@@ -1,0 +1,41 @@
+---
+title: react-native-dev-mcp
+description: MCP server that gives AI coding agents hands, eyes and a mechanic's ear for React Native development.
+template: splash
+hero:
+  tagline: Hands, eyes and a mechanic's ear for AI agents working on React Native apps.
+  actions:
+    - text: Quickstart
+      link: /react-native-mcp/getting-started/quickstart/
+      icon: right-arrow
+    - text: View on GitHub
+      link: https://github.com/luizesper/react-native-mcp
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+<CardGrid stagger>
+  <Card title="Device control" icon="rocket">
+    One uniform interface over `simctl` and `adb`: list and boot simulators/emulators,
+    install and launch apps, open deep links, capture screenshots with a clean demo
+    status bar. The agent never needs to know which platform it is driving.
+  </Card>
+  <Card title="Runtime bridge" icon="magnifier">
+    Connects to Metro's inspector (CDP/Hermes, React Native 0.76+). Streams console
+    logs into a cursor-based buffer and evaluates JavaScript inside the live app —
+    inspect store state, trigger navigation, verify a fix actually worked. No app code
+    changes, no extra dependency.
+  </Card>
+  <Card title="Build diagnostics" icon="setting">
+    Runs xcodebuild/Gradle as background jobs and matches the log against a
+    community-maintained signature database of known React Native failures — returning
+    file, line, probable cause and a suggested fix instead of 4,000 raw lines.
+  </Card>
+  <Card title="Environment-aware" icon="approve-check">
+    Detects your toolchains at startup: on Windows/Linux iOS tools are never registered;
+    transient problems come back as structured errors with remediation the agent can act
+    on. `doctor` reports the full health picture.
+  </Card>
+</CardGrid>

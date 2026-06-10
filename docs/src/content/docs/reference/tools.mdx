@@ -1,0 +1,473 @@
+---
+title: Tools
+description: Complete reference for all 20 tools, generated from the source schemas.
+---
+
+{/* GENERATED FILE — do not edit. Run `pnpm gen:docs` after changing tool schemas. */}
+
+All tools return a short text summary plus `structuredContent` matching the output schema.
+Failures come back as structured errors — see [error codes](/react-native-mcp/reference/error-codes/).
+Tool availability depends on your host (e.g. iOS tools require macOS); run `doctor` to see
+what's registered.
+
+## Environment
+
+### `doctor`
+
+Check the health of the React Native development environment: detected OS, iOS/Android toolchains, Metro status and project info. Call this first when something is failing or before device/build operations.
+
+*read-only*
+
+**Input:**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `projectRoot` | `string` | no | Project root to inspect (default: server --project-root) |
+
+**Output (`structuredContent`):**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `host` | `object` | yes |  |
+| `ios` | `object` | yes |  |
+| `android` | `object` | yes |  |
+| `metro` | `object` | yes |  |
+| `project` | `object` | yes |  |
+| `problems` | `array<object>` | yes |  |
+| `restartRequired` | `boolean` | yes |  |
+
+<sup>Contract: [spec 001](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+
+## Device control
+
+### `list_devices`
+
+List iOS simulators and Android emulators/devices in a unified format. By default shows booted devices plus the newest-OS variant per device family; pass filter "all" for everything.
+
+*read-only*
+
+**Input:**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `platform` | `ios` \| `android` | no | Only list one platform |
+| `state` | `booted` \| `shutdown` | no | Only list devices in this state |
+| `filter` | `default` \| `all` | no | "all" disables the newest-OS-per-family collapsing |
+
+**Output (`structuredContent`):**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `devices` | `array<object>` | yes |  |
+| `totalCount` | `number` | yes |  |
+| `shown` | `number` | yes |  |
+
+<sup>Contract: [spec 011](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+
+### `boot_device`
+
+Boot a simulator/emulator by id and wait until it is usable. No-op if already booted. For cold Android AVDs use the avd:\<name> id from list_devices.
+
+*idempotent*
+
+**Input:**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `deviceId` | `string` | yes | Device id from list_devices (simctl UDID, adb serial, or avd:\<name>) |
+| `timeoutSeconds` | `integer` | no | Max seconds to wait for boot (default 120) |
+
+**Output (`structuredContent`):**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `device` | `object` | yes |  |
+
+<sup>Contract: [spec 011](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+
+### `shutdown_device`
+
+Shut down a running simulator/emulator.
+
+*idempotent*
+
+**Input:**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `deviceId` | `string` | yes | Device id from list_devices (simctl UDID, adb serial, or avd:\<name>) |
+
+**Output (`structuredContent`):**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `deviceId` | `string` | yes |  |
+| `state` | `shutdown` | yes |  |
+
+<sup>Contract: [spec 011](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+
+### `install_app`
+
+Install a built app artifact on a booted device: a .app bundle (iOS simulator) or .apk (Android). Returns the app id for launch_app.
+
+
+**Input:**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `deviceId` | `string` | yes | Device id from list_devices (simctl UDID, adb serial, or avd:\<name>) |
+| `appPath` | `string` | yes | Path to the .app bundle (iOS) or .apk (Android) |
+
+**Output (`structuredContent`):**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `appId` | `string` | yes | Bundle id / package name (may be empty if undetectable) |
+
+<sup>Contract: [spec 012](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+
+### `uninstall_app`
+
+Uninstall an app from a device. Destructive: removes the app and its data.
+
+***destructive***
+
+**Input:**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `deviceId` | `string` | yes | Device id from list_devices (simctl UDID, adb serial, or avd:\<name>) |
+| `appId` | `string` | yes | Bundle id (iOS) or package name (Android) |
+
+**Output (`structuredContent`):**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `appId` | `string` | yes |  |
+| `removed` | `boolean` | yes |  |
+
+<sup>Contract: [spec 012](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+
+### `launch_app`
+
+Launch an installed app on a booted device by bundle id / package name.
+
+
+**Input:**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `deviceId` | `string` | yes | Device id from list_devices (simctl UDID, adb serial, or avd:\<name>) |
+| `appId` | `string` | yes | Bundle id (iOS) or package name (Android) |
+
+**Output (`structuredContent`):**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `pid` | `number` | no | Process id (iOS only) |
+
+<sup>Contract: [spec 012](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+
+### `terminate_app`
+
+Stop a running app. Succeeds (terminated: false) if the app was not running.
+
+*idempotent*
+
+**Input:**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `deviceId` | `string` | yes | Device id from list_devices (simctl UDID, adb serial, or avd:\<name>) |
+| `appId` | `string` | yes | Bundle id (iOS) or package name (Android) |
+
+**Output (`structuredContent`):**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `terminated` | `boolean` | yes |  |
+
+<sup>Contract: [spec 012](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+
+### `open_url`
+
+Open a URL on the device: custom schemes (myapp://...), universal links, or exp:// links. The primary way to drive app navigation from outside the app.
+
+
+**Input:**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `deviceId` | `string` | yes | Device id from list_devices (simctl UDID, adb serial, or avd:\<name>) |
+| `url` | `string` | yes | The URL or deep link to open |
+
+**Output (`structuredContent`):**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `opened` | `boolean` | yes |  |
+
+<sup>Contract: [spec 012](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+
+### `take_screenshot`
+
+Capture a screenshot of a booted device. Returns the PNG path and (by default) the image itself for visual verification.
+
+*read-only*
+
+**Input:**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `deviceId` | `string` | yes | Device id from list_devices (simctl UDID, adb serial, or avd:\<name>) |
+| `returnImage` | `boolean` | no | Include the image in the response (default true) |
+
+**Output (`structuredContent`):**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `path` | `string` | yes |  |
+| `format` | `png` | yes |  |
+
+<sup>Contract: [spec 013](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+
+### `set_status_bar_demo`
+
+Set a clean, deterministic status bar (9:41, full battery, full signal) for stable screenshots — or restore the real one with enabled: false.
+
+*idempotent*
+
+**Input:**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `deviceId` | `string` | yes | Device id from list_devices (simctl UDID, adb serial, or avd:\<name>) |
+| `enabled` | `boolean` | yes | true = demo mode, false = restore real status bar |
+| `time` | `string` | no | Clock to display (default "9:41") |
+
+**Output (`structuredContent`):**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `applied` | `boolean` | yes |  |
+
+<sup>Contract: [spec 013](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+
+## Runtime bridge
+
+### `list_runtime_targets`
+
+List debuggable React Native runtimes exposed by Metro. Call when a runtime tool reports TARGET_AMBIGUOUS or to check what is connectable. Requires Metro running.
+
+*read-only*
+
+**Input:**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `port` | `integer` | no | Metro port (default: server --metro-port) |
+
+**Output (`structuredContent`):**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `targets` | `array<object>` | yes |  |
+| `metroPort` | `number` | yes |  |
+
+<sup>Contract: [spec 020](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+
+### `read_console`
+
+Read console logs from the running React Native app (buffered since the runtime bridge connected). Cursor-based: pass the previous nextCursor to read only new entries. Requires Metro running.
+
+*read-only*
+
+**Input:**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `cursor` | `integer` | no | Read entries after this cursor (from a previous nextCursor) |
+| `limit` | `integer` | no | Max entries to return (default 50) |
+| `level` | `debug` \| `info` \| `warn` \| `error` | no | Minimum severity |
+| `filter` | `string` | no | Case-insensitive regex applied to entry text |
+| `targetId` | `string` | no | Runtime target id (from list_runtime_targets) |
+
+**Output (`structuredContent`):**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `entries` | `array<object>` | yes |  |
+| `nextCursor` | `number` | yes |  |
+| `dropped` | `number` | yes | Entries lost to ring-buffer overflow since the cursor |
+| `bufferedSince` | `number` | yes |  |
+
+<sup>Contract: [spec 021](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+
+### `evaluate_js`
+
+Execute a JavaScript expression inside the running React Native app and return the result. Use to inspect state (Redux/Zustand stores, globals) or trigger behavior. Promises are awaited via polling (Hermes limitation), up to timeoutMs. This can mutate app state — prefer read-only expressions when verifying. Requires Metro running.
+
+
+**Input:**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `expression` | `string` | yes | A JS expression (wrap multi-statement code in an IIFE) |
+| `awaitPromise` | `boolean` | no | Await a returned Promise via polling (default true) |
+| `timeoutMs` | `integer` | no | Promise wait budget (default 5000) |
+| `targetId` | `string` | no | Runtime target id (from list_runtime_targets) |
+
+**Output (`structuredContent`):**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `resultType` | `string` | yes |  |
+| `result` | `any` | no |  |
+| `preview` | `string` | no | String preview when the value is not fully serializable |
+| `truncated` | `boolean` | no |  |
+| `exception` | `object` | no |  |
+
+<sup>Contract: [spec 022](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+
+### `reload_app`
+
+Trigger a full JS reload of the running React Native app (same as pressing 'r' in the Metro terminal). Requires Metro running.
+
+*idempotent*
+
+**Input:**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `targetId` | `string` | no | Runtime target id (from list_runtime_targets) |
+
+**Output (`structuredContent`):**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `reloaded` | `boolean` | yes |  |
+
+<sup>Contract: [spec 023](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+
+## Build diagnostics
+
+### `run_build`
+
+Start a native build (xcodebuild or Gradle) in the background and return a job id immediately. Poll with get_build_status. Use after native-layer changes; for pure JS changes prefer reload_app.
+
+
+**Input:**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `platform` | `ios` \| `android` | yes | Which native platform to build |
+| `projectRoot` | `string` | no | Project root (default: server --project-root) |
+| `scheme` | `string` | no | iOS scheme (default: auto-detected from the workspace) |
+| `variant` | `string` | no | Android variant (default "debug") |
+| `clean` | `boolean` | no | Clean before building |
+
+**Output (`structuredContent`):**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `jobId` | `string` | yes |  |
+| `status` | `running` | yes |  |
+| `logPath` | `string` | yes |  |
+| `command` | `string` | yes |  |
+
+<sup>Contract: [spec 030](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+
+### `get_build_status`
+
+Check a build job started by run_build. Long-polls up to waitSeconds (default 25) so you can wait efficiently; on completion returns structured diagnostics with probable causes and suggested fixes.
+
+*read-only*
+
+**Input:**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `jobId` | `string` | yes |  |
+| `waitSeconds` | `integer` | no | Long-poll budget (default 25) |
+
+**Output (`structuredContent`):**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `status` | `running` \| `succeeded` \| `failed` \| `cancelled` | yes |  |
+| `elapsedMs` | `number` | yes |  |
+| `exitCode` | `number` | no |  |
+| `errorCount` | `number` | no |  |
+| `warningCount` | `number` | no |  |
+| `diagnostics` | `array<object>` | no |  |
+| `artifactPath` | `string` | no |  |
+| `logPath` | `string` | yes |  |
+| `logSizeBytes` | `number` | no |  |
+| `logTail` | `string` | no | Last lines of the log — only when no signature matched a failure |
+
+<sup>Contract: [spec 030](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+
+### `cancel_build`
+
+Cancel a running build job (kills the whole process tree).
+
+
+**Input:**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `jobId` | `string` | yes |  |
+
+**Output (`structuredContent`):**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `status` | `succeeded` \| `failed` \| `cancelled` | yes |  |
+
+<sup>Contract: [spec 030](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+
+### `run_pod_install`
+
+Run CocoaPods install for the iOS project (uses bundler when a Gemfile exists). Call when a build fails with sandbox/Podfile.lock errors or after adding native dependencies.
+
+
+**Input:**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `projectRoot` | `string` | no | Project root (default: server --project-root) |
+
+**Output (`structuredContent`):**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `succeeded` | `boolean` | yes |  |
+| `diagnostics` | `array<object>` | no |  |
+
+<sup>Contract: [spec 030](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+
+### `parse_build_log`
+
+Parse a native build log (xcodebuild, Gradle, CocoaPods, Metro) into structured diagnostics with probable causes and suggested fixes. Use on logs from terminals, CI, or a logPath from get_build_status.
+
+*read-only*
+
+**Input:**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `logPath` | `string` | no | Path to a log file on disk (max 20MB) |
+| `logText` | `string` | no | Raw log text (max 256KB) — provide exactly one of logPath/logText |
+
+**Output (`structuredContent`):**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `diagnostics` | `array<object>` | yes |  |
+| `errorCount` | `number` | yes |  |
+| `warningCount` | `number` | yes |  |
+| `platformGuess` | `ios` \| `android` \| `cocoapods` \| `metro` \| `unknown` | yes |  |
+| `unmatchedTail` | `string` | no |  |
+
+<sup>Contract: [spec 032](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+

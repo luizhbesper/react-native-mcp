@@ -50,6 +50,7 @@
     "lint:fix": "biome check --write .",
     "test": "vitest run",
     "test:watch": "vitest",
+    "gen:docs": "pnpm build && node scripts/gen-tool-docs.mjs",
     "prepublishOnly": "pnpm build"
   },
   "dependencies": {

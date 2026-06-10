@@ -24,6 +24,10 @@ jobs:
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm build
+      - name: Tool reference docs are in sync with schemas
+        run: |
+          node scripts/gen-tool-docs.mjs
+          git diff --exit-code docs/src/content/docs/reference/tools.mdx
       - name: Server answers tools/list over stdio
         run: |
           printf '%s\n%s\n%s\n' \
