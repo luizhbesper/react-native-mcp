@@ -186,14 +186,19 @@ export class SimctlBackend {
   }
 
   async screenshot(udid: string, outPath: string): Promise<void> {
-    const result = await this.simctl(['io', udid, 'screenshot', outPath]);
-    if (result.exitCode !== 0) {
-      throw new ToolError(
-        'SCREENSHOT_FAILED',
-        `simctl screenshot failed: ${result.stderr.trim()}`,
-        'Check the device is booted (list_devices), then retry.',
-      );
+    // right after boot the render surface may not exist yet — retry briefly
+    let lastError = '';
+    for (let attempt = 0; attempt < 4; attempt++) {
+      if (attempt > 0) await new Promise((resolve) => setTimeout(resolve, 2_000));
+      const result = await this.simctl(['io', udid, 'screenshot', outPath]);
+      if (result.exitCode === 0) return;
+      lastError = result.stderr.trim();
     }
+    throw new ToolError(
+      'SCREENSHOT_FAILED',
+      `simctl screenshot failed: ${lastError}`,
+      'Check the device is booted and showing UI (list_devices), then retry.',
+    );
   }
 
   async setStatusBarDemo(udid: string, enabled: boolean, time: string): Promise<void> {
