@@ -19,7 +19,9 @@ describe.runIf(enabled)('real Android emulator (CI integration)', () => {
     const devices = new DeviceManager(nodeExec, caps, true);
 
     const list = await devices.list({ platform: 'android', state: 'booted' });
-    expect(list.devices.length, 'emulator-runner should provide a booted device').toBeGreaterThan(0);
+    expect(list.devices.length, 'emulator-runner should provide a booted device').toBeGreaterThan(
+      0,
+    );
     const serial = list.devices[0]?.id as string;
 
     await devices.android().openUrl(serial, 'https://example.com');
