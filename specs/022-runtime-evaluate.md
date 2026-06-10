@@ -1,6 +1,6 @@
 # 022 — Runtime evaluate
 
-**Status:** Approved
+**Status:** Implemented
 **Pillar:** Runtime bridge
 
 ## Motivation

@@ -1,6 +1,6 @@
 # 020 — Metro discovery & CDP session
 
-**Status:** Approved
+**Status:** Implemented
 **Pillar:** Runtime bridge
 
 ## Motivation

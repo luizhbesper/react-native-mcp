@@ -1,9 +1,9 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.luizesper/react-native-dev-mcp",
+  "name": "io.github.luizhbesper/react-native-dev-mcp",
   "description": "MCP server for React Native development — unified simulator/emulator control, Metro/Hermes runtime bridge, and structured native build diagnostics.",
   "repository": {
-    "url": "https://github.com/luizesper/react-native-mcp",
+    "url": "https://github.com/luizhbesper/react-native-mcp",
     "source": "github"
   },
   "version": "0.0.0",

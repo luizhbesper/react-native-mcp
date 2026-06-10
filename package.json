@@ -21,10 +21,10 @@
   "author": "Luiz Esper <luiz.hb.esper@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/luizesper/react-native-mcp.git"
+    "url": "git+https://github.com/luizhbesper/react-native-mcp.git"
   },
-  "homepage": "https://luizesper.github.io/react-native-mcp",
-  "bugs": "https://github.com/luizesper/react-native-mcp/issues",
+  "homepage": "https://luizhbesper.github.io/react-native-mcp",
+  "bugs": "https://github.com/luizhbesper/react-native-mcp/issues",
   "type": "module",
   "bin": {
     "react-native-dev-mcp": "dist/index.mjs"

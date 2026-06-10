@@ -48,5 +48,5 @@ Run it locally with `pnpm test`.
 - `suggestedFix` should be executable advice, not "investigate the error".
 
 Can't open a PR? Use the
-[signature issue form](https://github.com/luizesper/react-native-mcp/issues/new?template=signature.yml)
+[signature issue form](https://github.com/luizhbesper/react-native-mcp/issues/new?template=signature.yml)
 and a maintainer will convert it.

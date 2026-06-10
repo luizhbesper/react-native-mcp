@@ -1,6 +1,6 @@
 # 012 — App management tools
 
-**Status:** Approved
+**Status:** Implemented
 **Pillar:** Device control
 
 ## Motivation

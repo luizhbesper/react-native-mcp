@@ -17,7 +17,7 @@ release candidate.
 2. **npm:** publish from `release.yml` using **OIDC trusted publishing** (no NPM_TOKEN
    secret; `id-token: write` permission) with provenance attestation.
 3. **MCP Registry:** after npm publish, `mcp-publisher` pushes `server.json`
-   (`io.github.luizesper/react-native-dev-mcp`) authenticated via GitHub OIDC.
+   (`io.github.luizhbesper/react-native-dev-mcp`) authenticated via GitHub OIDC.
 4. **GitHub Release:** created by the changesets action with the changelog; tag `vX.Y.Z`.
 
 ## Dry-run gate

@@ -1,6 +1,6 @@
 # 011 — Device lifecycle tools
 
-**Status:** Approved
+**Status:** Implemented
 **Pillar:** Device control
 
 ## Motivation

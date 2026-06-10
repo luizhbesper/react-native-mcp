@@ -1,6 +1,6 @@
 # 040 — Docs site & llms.txt
 
-**Status:** Approved
+**Status:** Implemented
 **Pillar:** Distribution
 
 ## Motivation

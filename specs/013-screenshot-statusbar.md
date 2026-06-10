@@ -1,6 +1,6 @@
 # 013 — Screenshot & status bar
 
-**Status:** Approved
+**Status:** Implemented
 **Pillar:** Device control
 
 ## Motivation

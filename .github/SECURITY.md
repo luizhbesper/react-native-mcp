@@ -4,7 +4,7 @@
 
 Please **do not** open a public issue for security problems.
 
-Use [GitHub private vulnerability reporting](https://github.com/luizesper/react-native-mcp/security/advisories/new)
+Use [GitHub private vulnerability reporting](https://github.com/luizhbesper/react-native-mcp/security/advisories/new)
 or email luiz.hb.esper@gmail.com. You will get an acknowledgement within 72 hours.
 
 ## Scope notes

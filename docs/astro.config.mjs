@@ -4,7 +4,7 @@ import { defineConfig } from 'astro/config';
 import starlightLlmsTxt from 'starlight-llms-txt';
 
 export default defineConfig({
-  site: 'https://luizesper.github.io',
+  site: 'https://luizhbesper.github.io',
   base: '/react-native-mcp',
   integrations: [
     starlight({
@@ -15,11 +15,11 @@ export default defineConfig({
         {
           icon: 'github',
           label: 'GitHub',
-          href: 'https://github.com/luizesper/react-native-mcp',
+          href: 'https://github.com/luizhbesper/react-native-mcp',
         },
       ],
       editLink: {
-        baseUrl: 'https://github.com/luizesper/react-native-mcp/edit/main/docs/',
+        baseUrl: 'https://github.com/luizhbesper/react-native-mcp/edit/main/docs/',
       },
       plugins: [starlightLlmsTxt()],
       sidebar: [

@@ -1,6 +1,6 @@
 # 023 — Reload
 
-**Status:** Approved
+**Status:** Implemented
 **Pillar:** Runtime bridge
 
 ## Motivation

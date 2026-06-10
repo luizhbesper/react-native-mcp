@@ -29,7 +29,7 @@ actionable diagnostics. If you hit a build failure this server didn't recognize:
    matches, and that your regex does **not** match any clean build log.
 
 That's the whole contract. If you can't open a PR, use the
-[signature issue form](https://github.com/luizesper/react-native-mcp/issues/new?template=signature.yml).
+[signature issue form](https://github.com/luizhbesper/react-native-mcp/issues/new?template=signature.yml).
 
 ## 2. Fix a bug
 

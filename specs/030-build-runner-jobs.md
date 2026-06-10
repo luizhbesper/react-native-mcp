@@ -1,6 +1,6 @@
 # 030 — Build runner & jobs
 
-**Status:** Approved
+**Status:** Implemented
 **Pillar:** Build diagnostics
 
 ## Motivation

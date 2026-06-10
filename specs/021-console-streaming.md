@@ -1,6 +1,6 @@
 # 021 — Console streaming
 
-**Status:** Approved
+**Status:** Implemented
 **Pillar:** Runtime bridge
 
 ## Motivation

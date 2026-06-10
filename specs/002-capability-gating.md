@@ -1,6 +1,6 @@
 # 002 — Capability gating
 
-**Status:** Approved
+**Status:** Implemented
 **Pillar:** Foundation
 
 ## Motivation

@@ -2,7 +2,7 @@
 
 > MCP server that gives AI coding agents hands, eyes and a mechanic's ear for React Native development.
 
-[![CI](https://github.com/luizesper/react-native-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/luizesper/react-native-mcp/actions/workflows/ci.yml)
+[![CI](https://github.com/luizhbesper/react-native-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/luizhbesper/react-native-mcp/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/react-native-dev-mcp)](https://www.npmjs.com/package/react-native-dev-mcp)
 [![node](https://img.shields.io/node/v/react-native-dev-mcp)](package.json)
 [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
@@ -87,7 +87,7 @@ take_screenshot              → 📸 verified visually
 **Runtime** · `list_runtime_targets` `read_console` `evaluate_js` `reload_app`
 **Build** · `run_build` `get_build_status` `cancel_build` `run_pod_install` `parse_build_log`
 
-Full reference with schemas and error codes: **[documentation site](https://luizesper.github.io/react-native-mcp)**.
+Full reference with schemas and error codes: **[documentation site](https://luizhbesper.github.io/react-native-mcp)**.
 
 ## Good to know
 

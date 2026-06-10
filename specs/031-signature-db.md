@@ -1,6 +1,6 @@
 # 031 — Signature database
 
-**Status:** Approved
+**Status:** Implemented
 **Pillar:** Build diagnostics
 
 ## Motivation

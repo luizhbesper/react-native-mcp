@@ -1,6 +1,6 @@
 # 001 — Environment detection
 
-**Status:** Approved
+**Status:** Implemented
 **Pillar:** Foundation
 
 ## Motivation

@@ -66,7 +66,7 @@ const sections = PILLARS.map(({ prefix, label }) => {
         annotationBadges(tool),
         schemaTable(tool.inputSchema, 'Input'),
         schemaTable(tool.outputSchema, 'Output (`structuredContent`)'),
-        `<sup>Contract: [spec ${tool.spec}](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>`,
+        `<sup>Contract: [spec ${tool.spec}](https://github.com/luizhbesper/react-native-mcp/tree/main/specs)</sup>`,
         '',
       ].join('\n'),
     )

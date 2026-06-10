@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
-  "changelog": ["@changesets/changelog-github", { "repo": "luizesper/react-native-mcp" }],
+  "changelog": ["@changesets/changelog-github", { "repo": "luizhbesper/react-native-mcp" }],
   "commit": false,
   "access": "public",
   "baseBranch": "main",

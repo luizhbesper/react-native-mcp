@@ -1,6 +1,6 @@
 # 000 — Conventions
 
-**Status:** Approved
+**Status:** Implemented
 **Pillar:** Foundation
 
 Global rules every tool in this server follows. Other specs inherit these by default and only

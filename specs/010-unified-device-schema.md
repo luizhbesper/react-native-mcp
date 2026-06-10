@@ -1,6 +1,6 @@
 # 010 — Unified device schema
 
-**Status:** Approved
+**Status:** Implemented
 **Pillar:** Device control
 
 ## Motivation

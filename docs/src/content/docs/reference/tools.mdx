@@ -36,7 +36,7 @@ Check the health of the React Native development environment: detected OS, iOS/A
 | `problems` | `array<object>` | yes |  |
 | `restartRequired` | `boolean` | yes |  |
 
-<sup>Contract: [spec 001](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+<sup>Contract: [spec 001](https://github.com/luizhbesper/react-native-mcp/tree/main/specs)</sup>
 
 ## Device control
 
@@ -62,7 +62,7 @@ List iOS simulators and Android emulators/devices in a unified format. By defaul
 | `totalCount` | `number` | yes |  |
 | `shown` | `number` | yes |  |
 
-<sup>Contract: [spec 011](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+<sup>Contract: [spec 011](https://github.com/luizhbesper/react-native-mcp/tree/main/specs)</sup>
 
 ### `boot_device`
 
@@ -83,7 +83,7 @@ Boot a simulator/emulator by id and wait until it is usable. No-op if already bo
 | --- | --- | --- | --- |
 | `device` | `object` | yes |  |
 
-<sup>Contract: [spec 011](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+<sup>Contract: [spec 011](https://github.com/luizhbesper/react-native-mcp/tree/main/specs)</sup>
 
 ### `shutdown_device`
 
@@ -104,7 +104,7 @@ Shut down a running simulator/emulator.
 | `deviceId` | `string` | yes |  |
 | `state` | `shutdown` | yes |  |
 
-<sup>Contract: [spec 011](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+<sup>Contract: [spec 011](https://github.com/luizhbesper/react-native-mcp/tree/main/specs)</sup>
 
 ### `install_app`
 
@@ -124,7 +124,7 @@ Install a built app artifact on a booted device: a .app bundle (iOS simulator) o
 | --- | --- | --- | --- |
 | `appId` | `string` | yes | Bundle id / package name (may be empty if undetectable) |
 
-<sup>Contract: [spec 012](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+<sup>Contract: [spec 012](https://github.com/luizhbesper/react-native-mcp/tree/main/specs)</sup>
 
 ### `uninstall_app`
 
@@ -146,7 +146,7 @@ Uninstall an app from a device. Destructive: removes the app and its data.
 | `appId` | `string` | yes |  |
 | `removed` | `boolean` | yes |  |
 
-<sup>Contract: [spec 012](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+<sup>Contract: [spec 012](https://github.com/luizhbesper/react-native-mcp/tree/main/specs)</sup>
 
 ### `launch_app`
 
@@ -166,7 +166,7 @@ Launch an installed app on a booted device by bundle id / package name.
 | --- | --- | --- | --- |
 | `pid` | `number` | no | Process id (iOS only) |
 
-<sup>Contract: [spec 012](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+<sup>Contract: [spec 012](https://github.com/luizhbesper/react-native-mcp/tree/main/specs)</sup>
 
 ### `terminate_app`
 
@@ -187,7 +187,7 @@ Stop a running app. Succeeds (terminated: false) if the app was not running.
 | --- | --- | --- | --- |
 | `terminated` | `boolean` | yes |  |
 
-<sup>Contract: [spec 012](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+<sup>Contract: [spec 012](https://github.com/luizhbesper/react-native-mcp/tree/main/specs)</sup>
 
 ### `open_url`
 
@@ -207,7 +207,7 @@ Open a URL on the device: custom schemes (myapp://...), universal links, or exp:
 | --- | --- | --- | --- |
 | `opened` | `boolean` | yes |  |
 
-<sup>Contract: [spec 012](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+<sup>Contract: [spec 012](https://github.com/luizhbesper/react-native-mcp/tree/main/specs)</sup>
 
 ### `take_screenshot`
 
@@ -229,7 +229,7 @@ Capture a screenshot of a booted device. Returns the PNG path and (by default) t
 | `path` | `string` | yes |  |
 | `format` | `png` | yes |  |
 
-<sup>Contract: [spec 013](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+<sup>Contract: [spec 013](https://github.com/luizhbesper/react-native-mcp/tree/main/specs)</sup>
 
 ### `set_status_bar_demo`
 
@@ -251,7 +251,7 @@ Set a clean, deterministic status bar (9:41, full battery, full signal) for stab
 | --- | --- | --- | --- |
 | `applied` | `boolean` | yes |  |
 
-<sup>Contract: [spec 013](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+<sup>Contract: [spec 013](https://github.com/luizhbesper/react-native-mcp/tree/main/specs)</sup>
 
 ## Runtime bridge
 
@@ -274,7 +274,7 @@ List debuggable React Native runtimes exposed by Metro. Call when a runtime tool
 | `targets` | `array<object>` | yes |  |
 | `metroPort` | `number` | yes |  |
 
-<sup>Contract: [spec 020](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+<sup>Contract: [spec 020](https://github.com/luizhbesper/react-native-mcp/tree/main/specs)</sup>
 
 ### `read_console`
 
@@ -301,7 +301,7 @@ Read console logs from the running React Native app (buffered since the runtime 
 | `dropped` | `number` | yes | Entries lost to ring-buffer overflow since the cursor |
 | `bufferedSince` | `number` | yes |  |
 
-<sup>Contract: [spec 021](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+<sup>Contract: [spec 021](https://github.com/luizhbesper/react-native-mcp/tree/main/specs)</sup>
 
 ### `evaluate_js`
 
@@ -327,7 +327,7 @@ Execute a JavaScript expression inside the running React Native app and return t
 | `truncated` | `boolean` | no |  |
 | `exception` | `object` | no |  |
 
-<sup>Contract: [spec 022](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+<sup>Contract: [spec 022](https://github.com/luizhbesper/react-native-mcp/tree/main/specs)</sup>
 
 ### `reload_app`
 
@@ -347,7 +347,7 @@ Trigger a full JS reload of the running React Native app (same as pressing 'r' i
 | --- | --- | --- | --- |
 | `reloaded` | `boolean` | yes |  |
 
-<sup>Contract: [spec 023](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+<sup>Contract: [spec 023](https://github.com/luizhbesper/react-native-mcp/tree/main/specs)</sup>
 
 ## Build diagnostics
 
@@ -375,7 +375,7 @@ Start a native build (xcodebuild or Gradle) in the background and return a job i
 | `logPath` | `string` | yes |  |
 | `command` | `string` | yes |  |
 
-<sup>Contract: [spec 030](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+<sup>Contract: [spec 030](https://github.com/luizhbesper/react-native-mcp/tree/main/specs)</sup>
 
 ### `get_build_status`
 
@@ -405,7 +405,7 @@ Check a build job started by run_build. Long-polls up to waitSeconds (default 25
 | `logSizeBytes` | `number` | no |  |
 | `logTail` | `string` | no | Last lines of the log — only when no signature matched a failure |
 
-<sup>Contract: [spec 030](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+<sup>Contract: [spec 030](https://github.com/luizhbesper/react-native-mcp/tree/main/specs)</sup>
 
 ### `cancel_build`
 
@@ -424,7 +424,7 @@ Cancel a running build job (kills the whole process tree).
 | --- | --- | --- | --- |
 | `status` | `succeeded` \| `failed` \| `cancelled` | yes |  |
 
-<sup>Contract: [spec 030](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+<sup>Contract: [spec 030](https://github.com/luizhbesper/react-native-mcp/tree/main/specs)</sup>
 
 ### `run_pod_install`
 
@@ -444,7 +444,7 @@ Run CocoaPods install for the iOS project (uses bundler when a Gemfile exists). 
 | `succeeded` | `boolean` | yes |  |
 | `diagnostics` | `array<object>` | no |  |
 
-<sup>Contract: [spec 030](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+<sup>Contract: [spec 030](https://github.com/luizhbesper/react-native-mcp/tree/main/specs)</sup>
 
 ### `parse_build_log`
 
@@ -469,5 +469,5 @@ Parse a native build log (xcodebuild, Gradle, CocoaPods, Metro) into structured 
 | `platformGuess` | `ios` \| `android` \| `cocoapods` \| `metro` \| `unknown` | yes |  |
 | `unmatchedTail` | `string` | no |  |
 
-<sup>Contract: [spec 032](https://github.com/luizesper/react-native-mcp/tree/main/specs)</sup>
+<sup>Contract: [spec 032](https://github.com/luizhbesper/react-native-mcp/tree/main/specs)</sup>
 

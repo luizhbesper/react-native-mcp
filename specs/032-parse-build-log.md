@@ -1,6 +1,6 @@
 # 032 — Offline log parsing
 
-**Status:** Approved
+**Status:** Implemented
 **Pillar:** Build diagnostics
 
 ## Motivation
