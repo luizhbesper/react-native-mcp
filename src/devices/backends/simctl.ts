@@ -239,6 +239,8 @@ export function parseSimctlList(json: string): Device[] {
   const devices: Device[] = [];
   for (const [runtimeKey, list] of Object.entries(parsed.devices ?? {})) {
     if (!Array.isArray(list)) continue;
+    // spec 010: watchOS/tvOS/visionOS targets are out of scope — iOS runtimes only
+    if (!/SimRuntime\.iOS-/.test(runtimeKey)) continue;
     const osVersion = runtimeToOsVersion(runtimeKey);
     for (const d of list) {
       if (d.isAvailable === false) continue;

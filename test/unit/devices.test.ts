@@ -25,17 +25,17 @@ describe('simctl parsing (spec 010)', () => {
     }
   });
 
-  it('AC5: tolerates unknown runtimes and excludes unavailable devices', () => {
+  it('AC5: excludes unavailable devices and non-iOS runtimes (spec 010 scope)', () => {
     const devices = parseSimctlList(fixture('simctl', 'multi-runtime.json'));
-    // 8 entries minus 1 unavailable
-    expect(devices).toHaveLength(7);
+    // 8 entries minus 1 unavailable minus 1 watchOS device
+    expect(devices).toHaveLength(6);
     expect(devices.find((d) => d.name === 'iPhone SE (3rd generation)')).toBeUndefined();
     const booted = devices.filter((d) => d.state === 'booted');
     expect(booted).toEqual([
       expect.objectContaining({ name: 'iPhone 16 Pro', osVersion: '18.4', state: 'booted' }),
     ]);
-    // watchOS runtime parsed too (tolerant)
-    expect(devices.find((d) => d.osVersion === '11.0')).toBeDefined();
+    // the watchOS runtime in the fixture must NOT leak in as an "ios" device
+    expect(devices.find((d) => d.name.startsWith('Apple Watch'))).toBeUndefined();
   });
 });
 

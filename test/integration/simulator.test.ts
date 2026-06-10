@@ -23,12 +23,17 @@ describe.runIf(enabled)('real iOS simulator (CI integration)', () => {
     const devices = new DeviceManager(nodeExec, caps, true);
 
     const list = await devices.list({ platform: 'ios', filter: 'all' });
+    console.error(
+      '[integration] simulators on this runner:',
+      JSON.stringify(list.devices, null, 1),
+    );
     expect(list.totalCount).toBeGreaterThan(0);
 
     const target =
       list.devices.find((d) => d.state === 'booted') ??
-      list.devices.find((d) => d.name.includes('iPhone') && d.state === 'shutdown');
-    expect(target, 'no usable iPhone simulator on this runner').toBeDefined();
+      list.devices.find((d) => d.name.includes('iPhone') && d.state === 'shutdown') ??
+      list.devices.find((d) => d.state === 'shutdown');
+    expect(target, 'no usable simulator on this runner').toBeDefined();
     const udid = (target as { id: string }).id;
 
     await devices.ios().boot(udid, 480);
