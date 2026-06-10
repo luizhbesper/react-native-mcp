@@ -121,7 +121,6 @@ The easiest high-impact contribution is a **build error signature** — pure YAM
 snippet, no TypeScript. See [CONTRIBUTING.md](CONTRIBUTING.md). Development is spec-driven:
 every tool's contract lives in [`specs/`](specs/).
 
-**Branches:** `dev` → pre-releases (`@next`). `main` → stable (`@latest`). PRs target `dev`; `dev` is merged into `main` to cut a release.
 
 ## License
 
