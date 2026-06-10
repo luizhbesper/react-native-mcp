@@ -1,6 +1,6 @@
 {
   "name": "react-native-dev-mcp",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "MCP server for React Native development — unified simulator/emulator control, Metro/Hermes runtime bridge, and structured native build diagnostics.",
   "keywords": [
     "mcp",
