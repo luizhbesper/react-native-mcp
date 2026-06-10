@@ -40,6 +40,17 @@ From here the agent can boot a device, build and install the app, read console l
 real time, evaluate JS in the running app, and screenshot the result. See
 [the agent loop](/react-native-mcp/guides/agent-loop/) for the full workflow.
 
+## 4. Try these prompts
+
+Talk to your agent in plain language — it picks the right tools:
+
+- *"Run my app on Android and figure out why it's broken at startup."*
+- *"Boot an iPhone simulator, build and install the app, then screenshot the login screen."*
+- *"The iOS build is failing. Diagnose it, apply the suggested fix and rebuild until it's green."*
+- *"Watch the console while I tap through checkout and summarize any errors you see."*
+- *"What's in the Redux store right now? Read the auth slice from the running app."*
+- *"Open the deep link myapp://profile/42 and verify it lands on the right screen."*
+
 :::tip[Project root]
 The server uses its working directory as the project root. If your client starts servers
 elsewhere, pass `--project-root /path/to/app` in the server args.

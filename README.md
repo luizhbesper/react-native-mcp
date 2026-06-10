@@ -60,6 +60,22 @@ args = ["-y", "react-native-dev-mcp"]
 Any MCP client that speaks stdio works — point it at `npx -y react-native-dev-mcp`.
 Useful flags: `--project-root <path>`, `--metro-port <port>`, `--eager-metro`, `--verbose`.
 
+## Try asking your agent
+
+Once installed, talk to your agent in plain language — it picks the right tools:
+
+> *"Run my app on Android and figure out why it's broken at startup."*
+
+> *"Boot an iPhone simulator, build and install the app, then screenshot the login screen."*
+
+> *"The iOS build is failing. Diagnose it, apply the suggested fix and rebuild until it's green."*
+
+> *"Watch the console while I tap through checkout and summarize any errors you see."*
+
+> *"What's in the Redux store right now? Read the auth slice from the running app."*
+
+> *"Open the deep link myapp://profile/42 and verify it lands on the right screen."*
+
 ## The loop
 
 A typical agent session against a real app:
