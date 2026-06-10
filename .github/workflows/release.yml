@@ -2,12 +2,12 @@ name: Release
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
 
 permissions:
   contents: write
   pull-requests: write
-  id-token: write # npm OIDC trusted publishing + MCP Registry auth — no token secrets
+  id-token: write
 
 concurrency: release-${{ github.ref }}
 
@@ -25,7 +25,9 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
 
-      - name: Create release PR or publish
+      # ── stable release (main) ──────────────────────────────────────────────
+      - name: Create release PR or publish (stable)
+        if: github.ref == 'refs/heads/main'
         id: changesets
         uses: changesets/action@v1
         with:
@@ -34,10 +36,30 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish to the MCP Registry
-        if: steps.changesets.outputs.published == 'true'
+      # ── pre-release (dev → @next) ──────────────────────────────────────────
+      - name: Publish pre-release to npm (@next)
+        if: github.ref == 'refs/heads/dev'
+        id: prerelease
         run: |
-          # keep server.json in lockstep with the published package version
+          # Enter pre-release mode if not already; bump snapshot version; publish @next
+          pnpm changeset pre enter next 2>/dev/null || true
+          pnpm changeset version
+          VERSION=$(node -p "require('./package.json').version")
+          echo "Publishing $VERSION as @next"
+          pnpm changeset publish --tag next
+          echo "published=true" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # ── MCP Registry (both branches, non-blocking) ─────────────────────────
+      - name: Publish to the MCP Registry
+        if: |
+          (github.ref == 'refs/heads/main' && steps.changesets.outputs.published == 'true') ||
+          (github.ref == 'refs/heads/dev' && steps.prerelease.outputs.published == 'true')
+        continue-on-error: true
+        run: |
           VERSION=$(node -p "require('./package.json').version")
           node -e "
             const fs = require('fs');
@@ -46,6 +68,10 @@ jobs:
             manifest.packages[0].version = '$VERSION';
             fs.writeFileSync('server.json', JSON.stringify(manifest, null, 2));
           "
-          curl -sL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m).tar.gz" | tar xz mcp-publisher
+          OS=$(uname -s | tr '[:upper:]' '[:lower:]')
+          ARCH=$(uname -m)
+          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_${OS}_${ARCH}.tar.gz" -o publisher.tar.gz
+          tar xzf publisher.tar.gz mcp-publisher
+          chmod +x mcp-publisher
           ./mcp-publisher login github-oidc
           ./mcp-publisher publish
