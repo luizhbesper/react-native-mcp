@@ -147,6 +147,32 @@ describe('simctl behaviors (specs 011/012)', () => {
     await expect(backend.terminate('UDID', 'com.example')).resolves.toBe(false);
   });
 
+  it('openurl retries past a transient post-boot timeout, then succeeds (spec 012 AC5)', async () => {
+    let attempts = 0;
+    const exec = fakeExec([
+      {
+        match: /simctl openurl/,
+        result: () =>
+          attempts++ === 0
+            ? { stdout: '', stderr: 'Operation timed out', exitCode: 60, timedOut: true }
+            : okResult(),
+      },
+    ]);
+    const backend = new SimctlBackend(exec, true);
+    await expect(backend.openUrl('UDID', 'https://example.com')).resolves.toBeUndefined();
+    expect(attempts).toBe(2);
+  });
+
+  it('openurl surfaces COMMAND_FAILED once retries are exhausted', async () => {
+    const exec = fakeExec([
+      { match: /simctl openurl/, result: failResult('unregistered scheme', 60) },
+    ]);
+    const backend = new SimctlBackend(exec, true);
+    await expect(backend.openUrl('UDID', 'foo://bar')).rejects.toMatchObject({
+      code: 'COMMAND_FAILED',
+    });
+  });
+
   it('BOOT_TIMEOUT when bootstatus exceeds the budget (spec 011 AC4)', async () => {
     const exec = fakeExec([
       {
