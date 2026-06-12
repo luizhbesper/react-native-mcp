@@ -175,14 +175,20 @@ export class SimctlBackend {
   }
 
   async openUrl(udid: string, url: string): Promise<void> {
-    const result = await this.simctl(['openurl', udid, url]);
-    if (result.exitCode !== 0) {
-      throw new ToolError(
-        'COMMAND_FAILED',
-        `simctl openurl failed: ${result.stderr.trim()}`,
-        'Check the device is booted and the URL scheme is registered.',
-      );
+    // right after boot LaunchServices/SpringBoard may not be ready yet and openurl
+    // times out (NSPOSIXErrorDomain code 60) — retry briefly, like screenshot does
+    let lastError = '';
+    for (let attempt = 0; attempt < 4; attempt++) {
+      if (attempt > 0) await new Promise((resolve) => setTimeout(resolve, 2_000));
+      const result = await this.simctl(['openurl', udid, url], { timeoutMs: 30_000 });
+      if (result.exitCode === 0) return;
+      lastError = result.timedOut ? 'simctl openurl timed out' : result.stderr.trim();
     }
+    throw new ToolError(
+      'COMMAND_FAILED',
+      `simctl openurl failed: ${lastError}`,
+      'Check the device is booted and the URL scheme is registered.',
+    );
   }
 
   async screenshot(udid: string, outPath: string): Promise<void> {
