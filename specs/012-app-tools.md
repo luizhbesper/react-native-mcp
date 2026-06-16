@@ -64,7 +64,8 @@ URL single-quoted and quote-escaped; a unit test covers injection attempts.
 - **AC-4** Given `terminate_app` for a non-running app, When called, Then success with
   `terminated: false` (no error).
 - **AC-5 (integration, macOS CI)** Given a real simulator, When `open_url` with
-  `https://example.com`, Then Safari opens (exit 0).
+  `https://example.com`, Then Safari opens (exit 0). `openurl` is retried briefly to
+  absorb the post-boot window where LaunchServices is not yet ready (timeout, code 60).
 
 ## Test plan
 
